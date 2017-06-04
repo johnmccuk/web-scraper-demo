@@ -16,7 +16,9 @@ use Sunra\PhpSimple\HtmlDomParser;
  */
 class WebScraper
 {
-    //TODO add dockblock
+    /*
+    * @var simplehtmldom_1_5\simple_html_dom $fullHtml contains the base url object
+    */
     protected $fullHtml;
 
     /**
@@ -211,7 +213,8 @@ class WebScraper
             return [];
         }
         try {
-            $meta = get_meta_tags($url);
+            //note were suppressing the warning here since it grumbles if its a 400 request
+            $meta = @get_meta_tags($url);
             return ($meta === false) ? [] : $meta;
         } catch (Exception $e) {
             return [];
