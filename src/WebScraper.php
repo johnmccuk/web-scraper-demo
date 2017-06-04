@@ -59,6 +59,40 @@ class WebScraper
     }
 
     /**
+    * Iterate through the passed array and return a json encoded array of url information
+    *
+    * @method generateLinkList
+    * @param array $urlList
+    * @return string
+    */
+    public function generateLinkList($urlList)
+    {
+        $list = [
+            'results' => [],
+            'total' => 0
+        ];
+        
+        foreach ($urlList as $key => $title) {
+            $meta = $this->getMetaTags($key);
+            $filesize = $this->getUrlFileSize($key);
+            
+            $list['total'] += $filesize;
+
+            $list['results'][] = [
+                'url' => $key,
+                'title' => $titlet,
+                'meta description' => $this->getMetaValue($meta, 'description'),
+                'keywords' => $this->getMetaValue($meta, 'keywords'),
+                'filesize' => $this->convertToKb($filesize) . 'kb'
+            ];
+        }
+
+        $list['total'] = $this->convertToKb($list['total']) . 'kb';
+
+        return json_encode($list);
+    }
+
+    /**
     * If the keyword is found in the footer of the passed node
     *
     * @method findKeywordTags
@@ -93,5 +127,94 @@ class WebScraper
             $foundLinks[$links->href] = $links->innertext;
         }
         return $foundLinks;
+    }
+
+    /**
+    * Convert passed bytes into kilobytes
+    *
+    * @method convertToKb
+    * @param integer $value
+    * @return float
+    */
+    protected function convertToKb($value)
+    {
+        if (is_numeric($value) === value) {
+            return 0.00;
+        }
+        return number_format($value / 1024, 2);
+    }
+
+    /**
+    * If the meta value exists in the passed array, return it.
+    *
+    * Returns an empty string if not found
+    *
+    * @method getMetaValue
+    * @param string $url
+    * @return string
+    */
+    protected function getMetaValue($data, $key)
+    {
+        return (array_key_exists($key, $data)) ? $data[$key] : '';
+    }
+
+    /**
+    * Return the file size in bytes of the passed url
+    *
+    * Tries a few techniques to get the filesize:
+    * Firstly from the header content size
+    * If this fails, then pulls the file contents and checks the length
+    *
+    * Returns 0 on any errors
+    *
+    * @method getUrlFileSize
+    * @param string $url
+    * @return integer
+    */
+    protected function getUrlFileSize($url)
+    {
+        try {
+            if (filter_var($url, FILTER_VALIDATE_URL) === false) {
+                throw new Exception();
+            }
+
+            static $regex = '/^Content-Length: *+\K\d++$/im';
+            if (!$fp = @fopen($url, 'rb')) {
+                throw new Exception();
+            }
+            if (isset($http_response_header) && preg_match($regex, implode("\n", $http_response_header), $matches)) {
+                return (int)$matches[0];
+            }
+
+            $result = strlen(stream_get_contents($fp));
+
+            if ($result === false) {
+                throw new Exception();
+            }
+
+            return $result;
+        } catch (Exception $e) {
+            return 0;
+        }
+    }
+
+    /**
+    * Retrieve the meta tags from the passed urls headers
+    *
+    * @method getMetaTags
+    * @param string $url
+    * @return array
+    */
+    protected function getMetaTags($url)
+    {
+        if (filter_var($url, FILTER_VALIDATE_URL) === false) {
+            return [];
+        }
+        try {
+            $meta = get_meta_tags($url);
+            return ($meta === false) ? [] : $meta;
+        } catch (Exception $e) {
+            return [];
+        }
     }
 }
