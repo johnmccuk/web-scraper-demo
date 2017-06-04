@@ -82,7 +82,7 @@ class WebScraper
 
             $list['results'][] = [
                 'url' => $key,
-                'title' => $titlet,
+                'title' => $title,
                 'meta description' => $this->getMetaValue($meta, 'description'),
                 'keywords' => $this->getMetaValue($meta, 'keywords'),
                 'filesize' => $this->convertToKb($filesize) . 'kb'
