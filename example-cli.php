@@ -10,4 +10,5 @@ $elements = $webScraper->findValidElements();
 
 //generate a json string summary of all the selected urls
 $output = $webScraper->generateLinkList($elements);
-var_dump($output);
+
+echo $output;
