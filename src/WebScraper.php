@@ -42,14 +42,15 @@ class WebScraper
     *
     * returns the url as the array key, title as the value
     * @method findValidElements
+    * @param string $keyword tag keyword default is 'Digitalia''
     * @return array
     */
-    public function findValidElements()
+    public function findValidElements($keyword = 'Digitalia')
     {
         $elements = [];
         foreach ($this->fullHtml->find('article') as $key => $article) {
             try {
-                if ($this->findKeywordTags($article, 'Digitalia') === false) {
+                if ($this->findKeywordTags($article, $keyword) === false) {
                         continue;
                 }
                 $elements = array_merge($elements, $this->getArticleLinks($article));
