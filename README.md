@@ -18,8 +18,14 @@ See your specific operating system package manager
 ```
 git clone https://github.com/johnmccuk/web-scraper-demo.git
 cd web-scraper-demo
+composer install
 ```
+
+***Note:*** If you dont want the development libraries use `composer install --no-dev`
+
 ## Run
+
+From the command line
 
 `php -f example-cli.php`
 
