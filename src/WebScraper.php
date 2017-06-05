@@ -106,9 +106,10 @@ class WebScraper
     protected function findKeywordTags(\simplehtmldom_1_5\simple_html_dom_node $article, $keyword)
     {
         foreach ($article->find('a[rel="tag"]') as $footer) {
-            if ($footer->innertext == $keyword) {
-                return true;
+            if (strpos(strtolower($footer->innertext), strtolower($keyword)) === false) {
+                continue;
             }
+            return true;
         }
         return false;
     }
