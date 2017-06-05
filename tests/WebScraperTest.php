@@ -77,7 +77,7 @@ class WebScraperTest extends TestCase
             $calculatedTotal += floatval(str_replace('kb', '', $response['filesize']));
         }
 
-        //NOTE: issues trying to comparing 2 decimal places. Since this isnt critical, check to 1 DP
-        $this->assertEquals(round($total, 1), round($calculatedTotal, 1));
+        //NOTE: issues trying to comparing 2 decimal places. Since this isnt mission critical, check to whole no only
+        $this->assertEquals(round($total, 0), round($calculatedTotal, 0));
     }
 }
