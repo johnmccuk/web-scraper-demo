@@ -3,6 +3,8 @@ A web scraping technical demo by [John McCracken](https://blog.john-mccracken.co
 
 Pulls web links from a test site and returns a json formatted array of meta data for listed urls listed under a specific tag.
 
+See the example file ***example-cli.php*** for usage.
+
 ## Requirements
 ***PHP Curl***
 
