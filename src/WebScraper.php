@@ -142,7 +142,7 @@ class WebScraper
     */
     protected function convertToKb($value)
     {
-        if (is_numeric($value) === $value) {
+        if (is_numeric($value) === false) {
             return 0.00;
         }
         return number_format($value / 1024, 2);
